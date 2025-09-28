@@ -1,0 +1,15 @@
+.home {
+    padding-bottom: 3rem;
+  }
+  
+  .home h2 {
+    margin-bottom: 2rem;
+    color: #2c3e50;
+    text-align: center;
+  }
+  
+  .viagens-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+  }

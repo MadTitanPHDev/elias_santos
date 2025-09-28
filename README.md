@@ -1,70 +1,100 @@
-# Getting Started with Create React App
+# Elias Santos 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Aplicação web para cadastro, visualização e gerenciamento de viagens de bicicleta, com autenticação de usuários e upload de imagens. Desenvolvida em React no frontend e Node.js/Express no backend, utilizando MySQL para persistência dos dados.
 
-## Available Scripts
+## Funcionalidades
 
-In the project directory, you can run:
+- **Listagem de Viagens:** Página inicial exibe todas as viagens cadastradas, com resumo, imagem de capa, distância, duração e dificuldade.
+- **Detalhes da Viagem:** Página detalhada com informações completas, galeria de imagens, resumo, descrição, dados adicionais e datas de criação/atualização.
+- **Cadastro de Nova Viagem:** Usuários do tipo gestor podem cadastrar novas viagens, incluindo upload de múltiplas imagens (a primeira é usada como capa).
+- **Autenticação:** Login de usuários, com persistência de token JWT e dados do usuário no localStorage. Proteção de rotas para ações restritas a gestores.
+- **Upload de Imagens:** Suporte a upload de imagens para cada viagem, com armazenamento local e associação à viagem no banco de dados.
+- **Galeria Interativa:** Visualização das imagens da viagem em galeria, com modal para navegação entre fotos.
+- **Logout e Controle de Sessão:** Logout automático em caso de token inválido/expirado, e botão de sair no menu.
 
-### `npm start`
+## Estrutura de Pastas
+backend/ # Backend Node.js/Express config/ database.js # Configuração do MySQL create-admin.js # Script para criar usuário admin server.js # API principal
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+public/ # Arquivos estáticos do frontend src/ # Frontend React components/ # Componentes reutilizáveis (Header, ViagemCard, ViagemGaleria, ProtectedRoute) pages/ # Páginas principais (Home, Login, NovaViagem, ViagemDetalhes) services/ # Serviços de API e autenticação App.js # Componente principal
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Backend
 
-### `npm test`
+- **Express** para rotas REST.
+- **MySQL** para persistência.
+- **JWT** para autenticação.
+- **Multer** para upload de imagens.
+- **bcryptjs** para hash de senhas.
+- Rotas protegidas para cadastro de viagens e upload de imagens.
+- Script para criação de usuário admin ([backend/create-admin.js](backend/create-admin.js)).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Frontend
 
-### `npm run build`
+- **React** com React Router para navegação.
+- **Axios** para requisições à API.
+- **Autenticação** via token JWT, com interceptors automáticos.
+- **Proteção de rotas** para páginas restritas.
+- **Componentização** para reuso e organização do código.
+- **Estilização** com CSS customizado para cada página/componente.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Como rodar
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Backend
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Instale dependências:
+   ```sh
+   cd backend
+   npm install
 
-### `npm run eject`
+2. Configure o banco MySQL e crie o banco elias_santosdb.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+3. Execute o script de admin:
+    node create-admin.js
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+4. Inicie o servido:
+    node server.js    
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Frontend
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+1. Instale dependencias:
+    npm install
 
-## Learn More
+2. Inicie o app:
+    npm start
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+3. Acesse http://localhost:3000.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Usuário de Teste
+Email: admin@eliassantos.com
+Senha: admin@eliasSantos
+Tipo: gestor
+Principais Arquivos
+src/App.js: Componente principal, define rotas e integra autenticação.
+src/pages/Home.js: Listagem de viagens.
+src/pages/ViagemDetalhes.js: Detalhes completos de uma viagem.
+src/pages/NovaViagem.js: Cadastro de nova viagem (restrito a gestores).
+src/pages/Login.js: Tela de login.
+src/services/api.js: Serviço de integração com API de viagens.
+src/services/auth.js: Serviço de autenticação e controle de sessão.
+src/components/Header.js: Cabeçalho com navegação e controle de login/logout.
+src/components/ProtectedRoute.js: Proteção de rotas para autenticação e permissão de gestor.
+Observações
+O backend serve imagens via /uploads.
+O frontend espera a API rodando em http://localhost:5000.
+O sistema foi projetado para fácil expansão, permitindo novos tipos de usuários e funcionalidades.
+Para dúvidas ou sugestões, consulte os arquivos fonte ou abra uma issue!
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Arquivos citados:  
+- [App.js](http://_vscodecontentref_/4)  
+- [Home.js](http://_vscodecontentref_/5)  
+- [ViagemDetalhes.js](http://_vscodecontentref_/6)  
+- [NovaViagem.js](http://_vscodecontentref_/7)  
+- [Login.js](http://_vscodecontentref_/8)  
+- [api.js](http://_vscodecontentref_/9)  
+- [auth.js](http://_vscodecontentref_/10)  
+- [Header.js](http://_vscodecontentref_/11)  
+- [ProtectedRoute.js](http://_vscodecontentref_/12)  
+- [server.js](http://_vscodecontentref_/13)  
+- [create-admin.js](http://_vscodecontentref_/14)  
+- [database.js](http://_vscodecontentref_/15)

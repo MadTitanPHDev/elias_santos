@@ -1,0 +1,217 @@
+.header {
+  background: linear-gradient(135deg, #006837, #ffb82a);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  padding: 1.5rem 0;
+  text-align: center;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+
+.header .container {
+  position: relative;
+  z-index: 2;
+}
+
+/* Social Media Icons */
+.social-icons {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  display: flex;
+  gap: 12px;
+  z-index: 3;
+}
+
+.social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.social-icon:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.social-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.logo {
+  text-decoration: none;
+  color: white;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+
+.logo img {
+  height: 120px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin-bottom: 1rem;
+}
+
+.nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+  border: 1px solid transparent;
+}
+
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Estilo especial para o acesso admin */
+.admin-access {
+  background: linear-gradient(45deg, #ff6800, #ffb82a);
+  color: white !important;
+  border-radius: 20px;
+  padding: 0.6rem 1.2rem;
+  animation: pulse 2s infinite;
+  font-weight: bold;
+  border: none !important;
+}
+
+.admin-access:hover {
+  background: linear-gradient(45deg, #ffb82a, #ff6800);
+  transform: translateY(-2px);
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Botão de logout */
+.logout-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.logout-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.user-info {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  padding: 0.5rem;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem 0;
+  }
+  
+  .social-icons {
+    top: 10px;
+    left: 15px;
+    gap: 8px;
+  }
+  
+  .social-icon {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .social-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .logo img {
+    height: 96px;
+  }
+  
+  .subtitle {
+    font-size: 1rem;
+  }
+  
+  .nav {
+    gap: 0.8rem;
+  }
+  
+  .nav-link {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+  }
+  
+  .admin-access {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+/* Para mobile, esconder o acesso admin após algum tempo */
+@media (max-width: 480px) {
+  .admin-access {
+    animation-duration: 1s;
+  }
+  
+  .social-icons {
+    top: 8px;
+    left: 10px;
+    gap: 6px;
+  }
+  
+  .social-icon {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .social-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .logo img {
+    height: 72px;
+  }
+}

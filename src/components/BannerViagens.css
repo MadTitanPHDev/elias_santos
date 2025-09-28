@@ -1,0 +1,259 @@
+.banner-viagens {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    margin: 2rem 0;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+  
+  .banner-item {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: flex-end;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  
+  .banner-item:hover {
+    transform: scale(1.02);
+  }
+  
+  .banner-content {
+    padding: 2rem;
+    color: white;
+    width: 100%;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  }
+  
+  .banner-titulo {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  }
+  
+  .banner-descricao {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    max-width: 600px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+  }
+  
+  .banner-info {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .banner-distancia,
+  .banner-dias,
+  .banner-dificuldade {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  .banner-dificuldade.fácil {
+    background: rgba(39, 174, 96, 0.8);
+  }
+  .banner-dificuldade.moderada {
+    background: rgba(41, 128, 185, 0.8);
+  }
+  .banner-dificuldade.difícil {
+    background: rgba(230, 126, 34, 0.8);
+  }
+  .banner-dificuldade.extrema {
+    background: rgba(192, 57, 43, 0.8);
+  }
+  
+  .banner-btn {
+    background: linear-gradient(45deg, #ff6800, #ffb82a);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .banner-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(45deg, #ffb82a, #ff6800);
+  }
+  
+  /* Controles de navegação */
+  .banner-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+  }
+  
+  .banner-control:hover {
+    background: white;
+    transform: translateY(-50%) scale(1.1);
+  }
+  
+  .banner-control.prev {
+    left: 20px;
+  }
+  
+  .banner-control.next {
+    right: 20px;
+  }
+  
+  /* Indicadores */
+  .banner-indicators {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+  }
+  
+  .indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .indicator.active {
+    background: white;
+    transform: scale(1.2);
+  }
+  
+  .indicator:hover {
+    background: rgba(255, 255, 255, 0.8);
+  }
+  
+  /* Estados de loading e error */
+  .banner-loading,
+  .banner-error {
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #006837 0%, #ffb82a 100%);
+    border-radius: 15px;
+    color: white;
+    text-align: center;
+  }
+  
+  .loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top: 3px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .banner-error {
+    background: linear-gradient(135deg, #ff6800 0%, #ffb82a 100%);
+  }
+  
+  /* Responsividade */
+  @media (max-width: 768px) {
+    .banner-viagens {
+      height: 400px;
+      margin: 1rem 0;
+      border-radius: 10px;
+    }
+  
+    .banner-content {
+      padding: 1.5rem;
+    }
+  
+    .banner-titulo {
+      font-size: 2rem;
+    }
+  
+    .banner-descricao {
+      font-size: 1rem;
+    }
+  
+    .banner-info {
+      gap: 0.5rem;
+    }
+  
+    .banner-distancia,
+    .banner-dias,
+    .banner-dificuldade {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.8rem;
+    }
+  
+    .banner-btn {
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+    }
+  
+    .banner-control {
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+    }
+  
+    .banner-control.prev {
+      left: 10px;
+    }
+  
+    .banner-control.next {
+      right: 10px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .banner-viagens {
+      height: 350px;
+    }
+  
+    .banner-titulo {
+      font-size: 1.5rem;
+    }
+  
+    .banner-descricao {
+      font-size: 0.9rem;
+    }
+  
+    .banner-info {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
