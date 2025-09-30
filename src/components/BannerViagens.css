@@ -95,65 +95,6 @@
     background: linear-gradient(45deg, #ffb82a, #ff6800);
   }
   
-  /* Controles de navegação */
-  .banner-control {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.9);
-    border: none;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    font-size: 1.5rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    z-index: 10;
-  }
-  
-  .banner-control:hover {
-    background: white;
-    transform: translateY(-50%) scale(1.1);
-  }
-  
-  .banner-control.prev {
-    left: 20px;
-  }
-  
-  .banner-control.next {
-    right: 20px;
-  }
-  
-  /* Indicadores */
-  .banner-indicators {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 10px;
-    z-index: 10;
-  }
-  
-  .indicator {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: none;
-    background: rgba(255, 255, 255, 0.5);
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  
-  .indicator.active {
-    background: white;
-    transform: scale(1.2);
-  }
-  
-  .indicator:hover {
-    background: rgba(255, 255, 255, 0.8);
-  }
   
   /* Estados de loading e error */
   .banner-loading,
@@ -224,19 +165,6 @@
       font-size: 1rem;
     }
   
-    .banner-control {
-      width: 40px;
-      height: 40px;
-      font-size: 1.2rem;
-    }
-  
-    .banner-control.prev {
-      left: 10px;
-    }
-  
-    .banner-control.next {
-      right: 10px;
-    }
   }
   
   @media (max-width: 480px) {

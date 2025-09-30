@@ -58,7 +58,7 @@ const requireGestor = (req, res, next) => {
 
 
 
-// Configuração do Multer para upload de imagens (CORRIGIDA)
+// Configuração do Multer para upload de imagens (IMPLEMENTAÇÃO ROBUSTA)
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     // Criar diretório se não existir
@@ -70,9 +70,34 @@ const storage = multer.diskStorage({
     cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
-    // Nome único para evitar conflitos
-    const uniqueName = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}-${file.originalname}`;
-    cb(null, uniqueName);
+    // 1. Gerar nome único
+    const timestamp = Date.now();
+    const randomString = Math.random().toString(36).substring(2, 15);
+    
+    // 2. Sanitizar nome original
+    const originalName = file.originalname
+      .toLowerCase()                    // Minúsculas
+      .replace(/[^a-z0-9.-]/g, '-')     // Remove caracteres especiais
+      .replace(/-+/g, '-')              // Remove hífens duplicados
+      .replace(/^-|-$/g, '');           // Remove hífens do início/fim
+    
+    // 3. Extrair extensão de forma segura
+    const ext = path.extname(file.originalname).toLowerCase();
+    const validExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+    
+    // 4. Usar extensão padrão se inválida
+    const safeExt = validExtensions.includes(ext) ? ext : '.jpg';
+    
+    // 5. Gerar nome final (sem nome original para máxima segurança)
+    const filename = `${timestamp}-${randomString}${safeExt}`;
+    
+    console.log('📁 Nome original:', file.originalname);
+    console.log('📁 Nome sanitizado:', originalName);
+    console.log('📁 Extensão detectada:', ext);
+    console.log('📁 Extensão segura:', safeExt);
+    console.log('📁 Nome final:', filename);
+    
+    cb(null, filename);
   }
 });
 

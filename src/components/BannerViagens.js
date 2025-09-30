@@ -7,63 +7,39 @@ const BannerViagens = () => {
   const [viagens, setViagens] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
-    carregarViagensAleatorias();
+    carregarViagemAleatoria();
   }, []);
 
-  const carregarViagensAleatorias = async () => {
+  const carregarViagemAleatoria = async () => {
     try {
       setLoading(true);
       setError(null); // Limpar erro anterior
-      const response = await viagensAPI.getAleatorias(5); // Busca 5 viagens aleatórias
-      console.log('📋 Viagens aleatórias recebidas:', response.data);
+      const response = await viagensAPI.getAleatorias(1); // Busca apenas 1 viagem aleatória
+      console.log('📋 Viagem aleatória recebida:', response.data);
       setViagens(response.data || []);
     } catch (err) {
       console.error('Erro no banner:', err);
-      setError('Erro ao carregar viagens');
+      setError('Erro ao carregar viagem');
       setViagens([]); // Garantir que o array está vazio em caso de erro
     } finally {
       setLoading(false);
     }
   };
 
-  // Rotação automática do banner
-  useEffect(() => {
-    if (viagens.length > 1) {
-      const interval = setInterval(() => {
-        setCurrentIndex((prevIndex) => 
-          prevIndex === viagens.length - 1 ? 0 : prevIndex + 1
-        );
-      }, 5000); // Muda a cada 5 segundos
-
-      return () => clearInterval(interval);
-    }
-  }, [viagens.length]);
 
   const handleViagemClick = (viagemId) => {
     navigate(`/viagem/${viagemId}`);
   };
 
-  const nextViagem = () => {
-    setCurrentIndex(prevIndex => 
-      prevIndex === viagens.length - 1 ? 0 : prevIndex + 1
-    );
-  };
-
-  const prevViagem = () => {
-    setCurrentIndex(prevIndex => 
-      prevIndex === 0 ? viagens.length - 1 : prevIndex - 1
-    );
-  };
 
   if (loading) {
     return (
       <div className="banner-loading">
         <div className="loading-spinner"></div>
-        <p>Carregando destinos incríveis...</p>
+        <p>Carregando destino incrível...</p>
       </div>
     );
   }
@@ -77,7 +53,7 @@ const BannerViagens = () => {
           {error.includes('404') ? 'Servidor não está rodando' : error}
         </small>
         <button 
-          onClick={carregarViagensAleatorias}
+          onClick={carregarViagemAleatoria}
           style={{
             marginTop: '10px',
             padding: '8px 16px',
@@ -94,7 +70,7 @@ const BannerViagens = () => {
     );
   }
 
-  const viagemAtual = viagens[currentIndex];
+  const viagemAtual = viagens[0]; // Sempre a primeira (e única) viagem
   console.log('🎯 Banner - viagem atual:', viagemAtual);
 
   // Construir URL completa da imagem de capa
@@ -140,28 +116,6 @@ const BannerViagens = () => {
         </div>
       </div>
 
-      {/* Controles de navegação */}
-      {viagens.length > 1 && (
-        <>
-          <button className="banner-control prev" onClick={prevViagem}>
-            ‹
-          </button>
-          <button className="banner-control next" onClick={nextViagem}>
-            ›
-          </button>
-          
-          {/* Indicadores */}
-          <div className="banner-indicators">
-            {viagens.map((_, index) => (
-              <button
-                key={index}
-                className={`indicator ${index === currentIndex ? 'active' : ''}`}
-                onClick={() => setCurrentIndex(index)}
-              />
-            ))}
-          </div>
-        </>
-      )}
     </div>
   );
 };

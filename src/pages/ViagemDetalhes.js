@@ -10,6 +10,9 @@ const ViagemDetalhes = () => {
   const [viagem, setViagem] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [menuCompartilharAberto, setMenuCompartilharAberto] = useState(false);
+  const [viagemAnterior, setViagemAnterior] = useState(null);
+  const [viagemProxima, setViagemProxima] = useState(null);
 
   useEffect(() => {
     const fetchViagem = async () => {
@@ -17,6 +20,18 @@ const ViagemDetalhes = () => {
         setLoading(true);
         const response = await viagensAPI.getById(id);
         setViagem(response.data);
+
+        // Buscar viagens anterior e próxima
+        const todasViagens = await viagensAPI.getAll();
+        const viagens = todasViagens.data;
+        const indexAtual = viagens.findIndex(v => v.id === parseInt(id));
+        
+        if (indexAtual > 0) {
+          setViagemAnterior(viagens[indexAtual - 1]);
+        }
+        if (indexAtual < viagens.length - 1) {
+          setViagemProxima(viagens[indexAtual + 1]);
+        }
       } catch (err) {
         setError('Erro ao carregar detalhes da viagem');
         console.error('Erro:', err);
@@ -27,6 +42,20 @@ const ViagemDetalhes = () => {
 
     fetchViagem();
   }, [id]);
+
+  // Fechar menu de compartilhamento ao clicar fora
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuCompartilharAberto && !event.target.closest('.compartilhar-container')) {
+        setMenuCompartilharAberto(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [menuCompartilharAberto]);
 
   const getDificuldadeClass = (dificuldade) => {
     const classes = {
@@ -76,6 +105,44 @@ const ViagemDetalhes = () => {
       : `http://localhost:5000${imagePath}`;
   };
 
+
+  // Função para compartilhar
+  const compartilhar = (plataforma) => {
+    const url = window.location.href;
+    const titulo = viagem?.titulo || 'Viagem';
+    const texto = `Confira esta viagem incrível: ${titulo}`;
+    
+    let urlCompartilhamento = '';
+    
+    switch (plataforma) {
+      case 'whatsapp':
+        urlCompartilhamento = `https://wa.me/?text=${encodeURIComponent(texto + ' ' + url)}`;
+        break;
+      case 'facebook':
+        urlCompartilhamento = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+        break;
+      case 'twitter':
+        urlCompartilhamento = `https://twitter.com/intent/tweet?text=${encodeURIComponent(texto)}&url=${encodeURIComponent(url)}`;
+        break;
+      case 'link':
+        navigator.clipboard.writeText(url);
+        alert('Link copiado para a área de transferência!');
+        setMenuCompartilharAberto(false);
+        return;
+      default:
+        return;
+    }
+    
+    window.open(urlCompartilhamento, '_blank', 'width=600,height=400');
+    setMenuCompartilharAberto(false);
+  };
+
+  // Função para imprimir
+  const imprimir = () => {
+    window.print();
+  };
+
+
   if (loading) {
     return (
       <div className="loading-container">
@@ -120,7 +187,36 @@ const ViagemDetalhes = () => {
         {/* Cabeçalho */}
         <div className="detalhes-header">
           <div className="header-content">
-            <h1 className="detalhes-titulo">{viagem.titulo}</h1>
+            <div className="titulo-container">
+              <h1 className="detalhes-titulo">{viagem.titulo}</h1>
+              <div className="acoes-titulo">
+                <div className="compartilhar-container">
+                  <button 
+                    className="btn-compartilhar"
+                    onClick={() => setMenuCompartilharAberto(!menuCompartilharAberto)}
+                    title="Compartilhar"
+                  >
+                    📤
+                  </button>
+                  {menuCompartilharAberto && (
+                    <div className="menu-compartilhar ativo">
+                      <button onClick={() => compartilhar('whatsapp')}>
+                        📱 WhatsApp
+                      </button>
+                      <button onClick={() => compartilhar('facebook')}>
+                        📘 Facebook
+                      </button>
+                      <button onClick={() => compartilhar('twitter')}>
+                        🐦 Twitter
+                      </button>
+                      <button onClick={() => compartilhar('link')}>
+                        🔗 Copiar Link
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
 
             <div className="detalhes-meta">
               <div className="meta-item">
@@ -185,6 +281,13 @@ const ViagemDetalhes = () => {
                 <p>Nenhuma descrição disponível.</p>
               )}
             </div>
+            
+            {/* Botão de Inscrição */}
+            <div className="inscricao-container">
+              <button className="btn-inscricao">
+                🎯 Inscrever-se na Viagem
+              </button>
+            </div>
           </section>
 
           {/* Galeria de Imagens */}
@@ -229,11 +332,48 @@ const ViagemDetalhes = () => {
           </section>
         </div>
 
+        {/* Navegação entre viagens
+        {(viagemAnterior || viagemProxima) && (
+          <div className="navegacao-viagens">
+            <div className="nav-anterior">
+              {viagemAnterior ? (
+                <Link to={`/viagem/${viagemAnterior.id}`} className="nav-btn">
+                  ← {viagemAnterior.titulo}
+                </Link>
+              ) : (
+                <div className="nav-info">Primeira viagem</div>
+              )}
+            </div>
+            
+            <div className="nav-info">
+              Navegar entre viagens
+            </div>
+            
+            <div className="nav-proxima">
+              {viagemProxima ? (
+                <Link to={`/viagem/${viagemProxima.id}`} className="nav-btn">
+                  {viagemProxima.titulo} →
+                </Link>
+              ) : (
+                <div className="nav-info">Última viagem</div>
+              )}
+            </div>
+          </div>
+        )} */}
+
+
+
+
         {/* Rodapé */}
         <div className="detalhes-footer">
-          <Link to="/" className="btn-voltar">
-            ← Voltar para a Lista
-          </Link>
+          <div className="footer-acoes">
+            <Link to="/" className="btn-voltar">
+              ← Voltar para a Lista
+            </Link>
+            <button className="btn-imprimir" onClick={imprimir}>
+              🖨️ Imprimir
+            </button>
+          </div>
 
           <div className="footer-meta">
             <span>Criado em: {viagem.created_at ? new Date(viagem.created_at).toLocaleDateString('pt-BR') : 'Data não disponível'}</span>
