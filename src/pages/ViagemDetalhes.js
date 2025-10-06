@@ -2,6 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import ViagemGaleria from '../components/ViagemGaleria';
+import LazyImage from '../components/LazyImage';
+import Breadcrumbs from '../components/Breadcrumbs';
+import SEO from '../components/SEO';
 import { viagensAPI } from '../services/api';
 import './ViagemDetalhes.css';
 
@@ -174,15 +177,53 @@ const ViagemDetalhes = () => {
 
   const imagemCapa = getImagemCapa();
 
+  // Dados estruturados para a viagem específica
+  const structuredData = viagem ? {
+    "@context": "https://schema.org",
+    "@type": "TravelAction",
+    "name": viagem.titulo,
+    "description": viagem.resumo || viagem.descricao,
+    "url": `https://elias-santos.com/viagem/${viagem.id}`,
+    "image": imagemCapa ? getImageUrl(imagemCapa.caminho_imagem) : undefined,
+    "location": {
+      "@type": "Place",
+      "name": viagem.localizacao || "Local não informado"
+    },
+    "startTime": viagem.data_viagem,
+    "duration": viagem.duracao_dias ? `P${viagem.duracao_dias}D` : undefined,
+    "distance": viagem.distancia_km ? `${viagem.distancia_km} km` : undefined,
+    "organizer": {
+      "@type": "Person",
+      "name": "Elias Santos"
+    },
+    "offers": viagem.valor ? {
+      "@type": "Offer",
+      "price": viagem.valor,
+      "priceCurrency": "BRL"
+    } : undefined
+  } : null;
+
   return (
     <div className="viagem-detalhes">
+      {viagem && (
+        <SEO 
+          title={viagem.titulo}
+          description={viagem.resumo || `Descubra todos os detalhes da viagem ${viagem.titulo}. ${viagem.localizacao ? `Localizada em ${viagem.localizacao}.` : ''} ${viagem.distancia_km ? `Distância: ${viagem.distancia_km}km.` : ''} ${viagem.duracao_dias ? `Duração: ${viagem.duracao_dias} dias.` : ''}`}
+          keywords={`${viagem.titulo}, cicloviagem, ciclismo, ${viagem.localizacao || ''}, Elias Santos, viagem de bicicleta, rota ciclística, ${viagem.dificuldade || ''}`}
+          image={imagemCapa ? getImageUrl(imagemCapa.caminho_imagem) : undefined}
+          url={`/viagem/${viagem.id}`}
+          type="article"
+          structuredData={structuredData}
+        />
+      )}
       <div className="container">
         {/* Breadcrumb */}
-        <nav className="breadcrumb">
-          <Link to="/">Home</Link>
-          <span> / </span>
-          <span>{viagem.titulo}</span>
-        </nav>
+        <Breadcrumbs 
+          items={[
+            { name: 'Home', url: '/' },
+            { name: viagem.titulo, url: null }
+          ]}
+        />
 
         {/* Cabeçalho */}
         <div className="detalhes-header">
@@ -250,7 +291,7 @@ const ViagemDetalhes = () => {
 
 
           <div className="header-image">
-            <img
+            <LazyImage
               src={imagemCapa ? getImageUrl(imagemCapa.caminho_imagem) : 'https://images.unsplash.com/photo-1549476464-37392f717541?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80'}
               alt={`Capa: ${viagem.titulo}`}
               className="capa-imagem"

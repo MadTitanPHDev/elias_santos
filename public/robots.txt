@@ -1,3 +1,18 @@
-# https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+
+# Sitemap
+Sitemap: https://elias-santos.com/sitemap.xml
+
+# Bloquear páginas administrativas
+Disallow: /admin-acesso
+Disallow: /nova-viagem
+Disallow: /editar-viagem/
+
+# Permitir todas as outras páginas
+Allow: /
+Allow: /sobre
+Allow: /viagem/
+
+# Crawl-delay para ser respeitoso com o servidor
+Crawl-delay: 1

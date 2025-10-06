@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import WhatsAppButton from './components/WhatsAppButton';
 import Home from './pages/Home';
 import Sobre from './pages/Sobre';
 import NovaViagem from './pages/NovaViagem';
@@ -19,39 +21,42 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <div className="App">
-        <SecretAccess /> {/* Adicione esta linha */}
-        <Header />
-        <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/sobre" element={<Sobre />} />
-            <Route path="/viagem/:id" element={<ViagemDetalhes />} />
-            <Route path="/admin-acesso" element={<Login />} /> {/* Rota secreta */}
-            <Route 
-              path="/nova-viagem" 
-              element={
-                <ProtectedRoute requireGestor={true}>
-                  <NovaViagem />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/editar-viagem/:id" 
-              element={
-                <ProtectedRoute requireGestor={true}>
-                  <EditarViagem />
-                </ProtectedRoute>
-              } 
-            />
-            <Route path="*" element={<Navigate to="/" replace />} />
-            
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
+    <HelmetProvider>
+      <Router>
+        <div className="App">
+          <SecretAccess /> {/* Adicione esta linha */}
+          <Header />
+          <main>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/sobre" element={<Sobre />} />
+              <Route path="/viagem/:id" element={<ViagemDetalhes />} />
+              <Route path="/admin-acesso" element={<Login />} /> {/* Rota secreta */}
+              <Route 
+                path="/nova-viagem" 
+                element={
+                  <ProtectedRoute requireGestor={true}>
+                    <NovaViagem />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/editar-viagem/:id" 
+                element={
+                  <ProtectedRoute requireGestor={true}>
+                    <EditarViagem />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route path="*" element={<Navigate to="/" replace />} />
+              
+            </Routes>
+          </main>
+          <Footer />
+          <WhatsAppButton />
+        </div>
+      </Router>
+    </HelmetProvider>
   );
 }
 

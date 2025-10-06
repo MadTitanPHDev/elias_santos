@@ -70,6 +70,28 @@ const BannerViagens = () => {
     );
   }
 
+  // Verificar se há viagens disponíveis
+  if (viagens.length === 0) {
+    return (
+      <div className="banner-viagens">
+        <div className="banner-item banner-placeholder">
+          <div className="banner-content">
+            <h2 className="banner-titulo">🚴‍♂️ Descubra Novas Aventuras</h2>
+            <p className="banner-descricao">Em breve, novas viagens incríveis estarão disponíveis!</p>
+            <div className="banner-info">
+              <span className="banner-distancia">Em breve</span>
+              <span className="banner-dias">Aventuras</span>
+              <span className="banner-dificuldade moderada">Moderada</span>
+            </div>
+            <button className="banner-btn" onClick={() => window.location.reload()}>
+              🔄 Atualizar
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const viagemAtual = viagens[0]; // Sempre a primeira (e única) viagem
   console.log('🎯 Banner - viagem atual:', viagemAtual);
 

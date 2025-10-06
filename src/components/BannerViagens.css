@@ -128,6 +128,14 @@
   .banner-error {
     background: linear-gradient(135deg, #ff6800 0%, #ffb82a 100%);
   }
+
+  /* Banner placeholder quando não há viagens */
+  .banner-placeholder {
+    background: linear-gradient(135deg, #006837 0%, #ffb82a 100%);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
   
   /* Responsividade */
   @media (max-width: 768px) {

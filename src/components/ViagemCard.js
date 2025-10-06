@@ -1,6 +1,7 @@
 // src/components/ViagemCard.js
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import LazyImage from './LazyImage';
 import { viagensAPI } from '../services/api';
 import { authService } from '../services/auth';
 import './ViagemCard.css';
@@ -77,7 +78,7 @@ const ViagemCard = ({ viagem, onViagemDeleted }) => {
 
   return (
     <div className="viagem-card">
-      <img 
+      <LazyImage 
         src={getImagemUrl()} 
         alt={viagem.titulo} 
         className="viagem-imagem"
