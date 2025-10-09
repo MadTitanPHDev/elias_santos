@@ -118,7 +118,7 @@ const Footer = () => {
               <div className="contact-item">
                 <span className="contact-icon">📱</span>
                 <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer" className="contact-link">
-                  +55 (11) 99999-9999
+                  +55 (18) 98178-8835
                 </a>
               </div>
               
