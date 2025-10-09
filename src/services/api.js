@@ -1,8 +1,9 @@
 
 import axios from 'axios';
 import { authService } from './auth';
+import { getBackendUrl } from '../config/backend';
 
-const API_BASE_URL = 'http://localhost:5000/api'; // Altere para a URL do seu backend
+const API_BASE_URL = getBackendUrl(); // URL do backend PHP
 
 const api = axios.create({
   baseURL: API_BASE_URL,

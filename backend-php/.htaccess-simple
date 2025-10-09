@@ -1,0 +1,7 @@
+# .htaccess simplificado para teste
+RewriteEngine On
+
+# Teste básico - redirecionar tudo para test.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ test.php [QSA,L]
