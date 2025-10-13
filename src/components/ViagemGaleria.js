@@ -1,5 +1,6 @@
 // src/components/ViagemGaleria.js
 import React, { useState } from 'react';
+import { getImageUrl as buildImageUrl } from '../config/urls';
 import './ViagemGaleria.css';
 
 const ViagemGaleria = ({ imagens, titulo }) => {
@@ -23,9 +24,7 @@ const ViagemGaleria = ({ imagens, titulo }) => {
 
   // Função para obter URL completa da imagem
   const getImageUrl = (path) => {
-    if (!path) return 'https://via.placeholder.com/300x200/cccccc/999999?text=Imagem+Não+Encontrada';
-    if (path.startsWith('http')) return path;
-    return `http://localhost:5000${path}`;
+    return buildImageUrl(path);
   };
 
   const handleImageError = (index) => {

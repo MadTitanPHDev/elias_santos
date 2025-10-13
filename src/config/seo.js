@@ -1,7 +1,7 @@
 // Configurações de SEO
 export const SEO_CONFIG = {
   siteName: 'Elias Santos - Cicloviagens',
-  siteUrl: process.env.REACT_APP_SITE_URL || 'https://elias-santos.com',
+  siteUrl: process.env.REACT_APP_SITE_URL || 'https://khaki-alpaca-178991.hostingersite.com',
   defaultDescription: 'Descubra as melhores cicloviagens e rotas para pedalar. Aventuras sobre duas rodas, galeria de fotos e dicas para ciclistas.',
   defaultKeywords: 'cicloviagens, ciclismo, rotas de bike, turismo sustentável, aventuras, pedal, Elias Santos',
   author: 'Elias Santos',

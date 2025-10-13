@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { viagensAPI } from '../services/api';
 import { authService } from '../services/auth';
+import { URLS } from '../config/urls';
 import './NovaViagem.css';
 
 
@@ -104,7 +105,7 @@ const NovaViagem = () => {
       console.log('📤 Enviando imagem:', imagens[i].name);
       
       // Usar fetch diretamente para melhor controle
-      const response = await fetch('http://localhost:5000/api/upload', {
+      const response = await fetch(URLS.upload, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`

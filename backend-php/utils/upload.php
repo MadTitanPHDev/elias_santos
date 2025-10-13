@@ -7,7 +7,7 @@
 class ImageUpload {
     private static $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
     private static $maxSize = 10 * 1024 * 1024; // 10MB
-    private static $uploadDir = 'uploads/';
+    private static $uploadDir = __DIR__ . '/../public/uploads/';
     
     /**
      * Processar upload de imagem
@@ -25,9 +25,12 @@ class ImageUpload {
             $filepath = self::$uploadDir . $filename;
             
             // Mover arquivo
+            error_log('📁 Tentando mover arquivo para: ' . $filepath);
             if (!move_uploaded_file($file['tmp_name'], $filepath)) {
+                error_log('❌ Erro ao mover arquivo');
                 throw new Exception('Erro ao salvar arquivo');
             }
+            error_log('✅ Arquivo movido com sucesso');
             
             // Otimizar imagem (opcional)
             self::optimizeImage($filepath);
@@ -103,10 +106,16 @@ class ImageUpload {
      * Criar diretório de upload
      */
     private static function createUploadDir() {
+        error_log('📁 Tentando criar diretório: ' . self::$uploadDir);
         if (!file_exists(self::$uploadDir)) {
+            error_log('📁 Diretório não existe, criando...');
             if (!mkdir(self::$uploadDir, 0755, true)) {
+                error_log('❌ Erro ao criar diretório de upload');
                 throw new Exception('Erro ao criar diretório de upload');
             }
+            error_log('✅ Diretório criado com sucesso');
+        } else {
+            error_log('✅ Diretório já existe');
         }
     }
     
@@ -240,10 +249,11 @@ class ImageUpload {
             );
         }
         
-        // Inserir nova imagem
+        // Inserir nova imagem (usar apenas o caminho relativo)
+        $relativePath = str_replace(__DIR__ . '/../public/', '', $filepath);
         $imageId = $db->insert(
             'INSERT INTO viagem_imagens (viagem_id, caminho_imagem, descricao_imagem, is_capa) VALUES (?, ?, ?, ?)',
-            [$viagemId, '/' . $filepath, $descricao ?: 'Imagem da viagem', $isCapa]
+            [$viagemId, '/' . $relativePath, $descricao ?: 'Imagem da viagem', $isCapa]
         );
         
         return $imageId;

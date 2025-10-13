@@ -1,100 +1,205 @@
-# Elias Santos 
+# 🚴‍♂️ Elias Santos - Sistema de Cicloviagens
 
-Aplicação web para cadastro, visualização e gerenciamento de viagens de bicicleta, com autenticação de usuários e upload de imagens. Desenvolvida em React no frontend e Node.js/Express no backend, utilizando MySQL para persistência dos dados.
+Sistema web completo para gerenciamento e visualização de viagens de bicicleta, desenvolvido com React no frontend e PHP no backend.
 
-## Funcionalidades
+## 🏗️ Arquitetura
 
-- **Listagem de Viagens:** Página inicial exibe todas as viagens cadastradas, com resumo, imagem de capa, distância, duração e dificuldade.
-- **Detalhes da Viagem:** Página detalhada com informações completas, galeria de imagens, resumo, descrição, dados adicionais e datas de criação/atualização.
-- **Cadastro de Nova Viagem:** Usuários do tipo gestor podem cadastrar novas viagens, incluindo upload de múltiplas imagens (a primeira é usada como capa).
-- **Autenticação:** Login de usuários, com persistência de token JWT e dados do usuário no localStorage. Proteção de rotas para ações restritas a gestores.
-- **Upload de Imagens:** Suporte a upload de imagens para cada viagem, com armazenamento local e associação à viagem no banco de dados.
-- **Galeria Interativa:** Visualização das imagens da viagem em galeria, com modal para navegação entre fotos.
-- **Logout e Controle de Sessão:** Logout automático em caso de token inválido/expirado, e botão de sair no menu.
+### **Frontend (React)**
+- **Framework**: React 19.1.1 com React Router DOM
+- **Autenticação**: JWT com localStorage
+- **UI**: Componentes customizados responsivos
+- **SEO**: React Helmet Async para meta tags
 
-## Estrutura de Pastas
-backend/ # Backend Node.js/Express config/ database.js # Configuração do MySQL create-admin.js # Script para criar usuário admin server.js # API principal
+### **Backend (PHP)**
+- **Linguagem**: PHP puro (sem frameworks)
+- **Banco**: MySQL com PDO
+- **Autenticação**: JWT customizado
+- **Upload**: Sistema próprio de upload de imagens
+- **API**: RESTful com roteamento manual
 
-public/ # Arquivos estáticos do frontend src/ # Frontend React components/ # Componentes reutilizáveis (Header, ViagemCard, ViagemGaleria, ProtectedRoute) pages/ # Páginas principais (Home, Login, NovaViagem, ViagemDetalhes) services/ # Serviços de API e autenticação App.js # Componente principal
+## 📁 Estrutura do Projeto
 
-## Backend
+```
+elias_santos/
+├── backend-php/              # Backend PHP
+│   ├── api/
+│   │   └── index.php         # API principal
+│   ├── config/               # Configurações
+│   ├── middleware/           # Middleware de autenticação
+│   ├── utils/                # Utilitários (upload)
+│   ├── setup/                # Scripts de configuração
+│   └── public/uploads/       # Imagens enviadas
+├── src/                      # Frontend React
+│   ├── components/           # Componentes reutilizáveis
+│   ├── pages/                # Páginas da aplicação
+│   ├── services/             # Serviços de API
+│   ├── config/               # Configurações
+│   └── utils/                # Utilitários
+├── build/                    # Build de produção
+├── public/                   # Arquivos públicos
+└── node_modules/             # Dependências
+```
 
-- **Express** para rotas REST.
-- **MySQL** para persistência.
-- **JWT** para autenticação.
-- **Multer** para upload de imagens.
-- **bcryptjs** para hash de senhas.
-- Rotas protegidas para cadastro de viagens e upload de imagens.
-- Script para criação de usuário admin ([backend/create-admin.js](backend/create-admin.js)).
+## 🚀 Funcionalidades
 
-## Frontend
+### **Gerenciamento de Viagens**
+- ✅ CRUD completo de viagens
+- ✅ Upload de múltiplas imagens
+- ✅ Sistema de imagem de capa
+- ✅ Metadados (distância, duração, dificuldade, valor)
+- ✅ Localização e data da viagem
 
-- **React** com React Router para navegação.
-- **Axios** para requisições à API.
-- **Autenticação** via token JWT, com interceptors automáticos.
-- **Proteção de rotas** para páginas restritas.
-- **Componentização** para reuso e organização do código.
-- **Estilização** com CSS customizado para cada página/componente.
+### **Sistema de Usuários**
+- ✅ Autenticação JWT com expiração
+- ✅ Controle de permissões (gestor/usuário)
+- ✅ Login/logout com persistência
+- ✅ Proteção de rotas sensíveis
 
-## Como rodar
+### **Interface do Usuário**
+- ✅ Design responsivo e moderno
+- ✅ Galeria de imagens interativa
+- ✅ Navegação intuitiva com breadcrumbs
+- ✅ Compartilhamento social
+- ✅ SEO otimizado
 
-### Backend
+### **Recursos Avançados**
+- ✅ Lazy loading de imagens
+- ✅ Acesso secreto (Ctrl+Alt+Shift+A)
+- ✅ Botão WhatsApp flutuante
+- ✅ Sistema de logs detalhado
 
-1. Instale dependências:
-   ```sh
-   cd backend
-   npm install
+## 🛠️ Instalação e Configuração
 
-2. Configure o banco MySQL e crie o banco elias_santosdb.
+### **Pré-requisitos**
+- Node.js 16+ 
+- PHP 7.4+
+- MySQL 5.7+
+- Servidor web (Apache/Nginx)
 
-3. Execute o script de admin:
-    node create-admin.js
+### **Frontend**
+```bash
+# Instalar dependências
+npm install
 
-4. Inicie o servido:
-    node server.js    
+# Desenvolvimento
+npm start
 
-### Frontend
+# Build para produção
+npm run build
+```
 
-1. Instale dependencias:
-    npm install
+### **Backend**
+1. **Configurar banco de dados** em `backend-php/config/database.php`
+2. **Criar usuário admin**: Acesse `/backend-php/setup/create-admin.php`
+3. **Configurar URLs** em `src/config/urls.js`
 
-2. Inicie o app:
-    npm start
+### **Credenciais Admin Padrão**
+- **Email**: `admin@eliassantos.com`
+- **Senha**: `admin@eliasSantos`
 
-3. Acesse http://localhost:3000.
+## 🌐 Deploy
 
-Usuário de Teste
-Email: admin@eliassantos.com
-Senha: admin@eliasSantos
-Tipo: gestor
-Principais Arquivos
-src/App.js: Componente principal, define rotas e integra autenticação.
-src/pages/Home.js: Listagem de viagens.
-src/pages/ViagemDetalhes.js: Detalhes completos de uma viagem.
-src/pages/NovaViagem.js: Cadastro de nova viagem (restrito a gestores).
-src/pages/Login.js: Tela de login.
-src/services/api.js: Serviço de integração com API de viagens.
-src/services/auth.js: Serviço de autenticação e controle de sessão.
-src/components/Header.js: Cabeçalho com navegação e controle de login/logout.
-src/components/ProtectedRoute.js: Proteção de rotas para autenticação e permissão de gestor.
-Observações
-O backend serve imagens via /uploads.
-O frontend espera a API rodando em http://localhost:5000.
-O sistema foi projetado para fácil expansão, permitindo novos tipos de usuários e funcionalidades.
-Para dúvidas ou sugestões, consulte os arquivos fonte ou abra uma issue!
+### **Hospedagem Compartilhada**
+1. Upload da pasta `backend-php/` para `public_html/backend-php/`
+2. Upload do conteúdo da pasta `build/` para `public_html/`
+3. Configurar banco de dados MySQL
+4. Configurar URLs no frontend
 
+### **URLs de Produção**
+- **Site**: `https://khaki-alpaca-178991.hostingersite.com`
+- **API**: `https://khaki-alpaca-178991.hostingersite.com/backend-php/api`
 
+## 🔧 Configuração
 
-Arquivos citados:  
-- [App.js](http://_vscodecontentref_/4)  
-- [Home.js](http://_vscodecontentref_/5)  
-- [ViagemDetalhes.js](http://_vscodecontentref_/6)  
-- [NovaViagem.js](http://_vscodecontentref_/7)  
-- [Login.js](http://_vscodecontentref_/8)  
-- [api.js](http://_vscodecontentref_/9)  
-- [auth.js](http://_vscodecontentref_/10)  
-- [Header.js](http://_vscodecontentref_/11)  
-- [ProtectedRoute.js](http://_vscodecontentref_/12)  
-- [server.js](http://_vscodecontentref_/13)  
-- [create-admin.js](http://_vscodecontentref_/14)  
-- [database.js](http://_vscodecontentref_/15)
+### **Variáveis de Ambiente**
+```bash
+# .env.local
+REACT_APP_API_URL=https://khaki-alpaca-178991.hostingersite.com/backend-php/api
+REACT_APP_SITE_URL=https://khaki-alpaca-178991.hostingersite.com
+```
+
+### **Configuração do Banco**
+```php
+// backend-php/config/database.php
+private $host = 'localhost';
+private $dbname = 'seu_banco';
+private $username = 'seu_usuario';
+private $password = 'sua_senha';
+```
+
+## 📊 Endpoints da API
+
+```
+GET  /api/                    # Informações da API
+GET  /api/health             # Status do servidor
+POST /api/login              # Autenticação
+GET  /api/verify             # Verificar token
+GET  /api/viagens            # Listar viagens
+GET  /api/viagens/:id        # Viagem específica
+POST /api/viagens            # Criar viagem
+PUT  /api/viagens/:id        # Atualizar viagem
+DELETE /api/viagens/:id      # Excluir viagem
+POST /api/upload             # Upload de imagem
+```
+
+## 🔐 Segurança
+
+- ✅ Headers de segurança configurados
+- ✅ Validação rigorosa de uploads
+- ✅ Sanitização de dados
+- ✅ JWT com expiração
+- ✅ Prepared statements
+- ✅ CORS configurado
+
+## 📱 Responsividade
+
+- ✅ Mobile-first design
+- ✅ Touch gestures na galeria
+- ✅ Menu responsivo
+- ✅ Imagens otimizadas
+
+## 🎯 SEO
+
+- ✅ Meta tags dinâmicas
+- ✅ Dados estruturados (JSON-LD)
+- ✅ Sitemap automático
+- ✅ URLs amigáveis
+- ✅ Open Graph tags
+
+## 🐛 Troubleshooting
+
+### **Erro 500 no Backend**
+- Verificar logs em `backend-php/logs/`
+- Confirmar configurações do banco
+- Verificar permissões dos diretórios
+
+### **CORS Error**
+- Editar `backend-php/config/cors.php`
+- Adicionar domínio na lista permitida
+- Verificar se está usando HTTPS
+
+### **Upload não funciona**
+- Verificar permissões: `chmod 755 uploads/`
+- Confirmar limite PHP: `upload_max_filesize = 10M`
+- Verificar se diretório existe
+
+## 📞 Suporte
+
+### **Logs Importantes**
+- **Aplicação**: `backend-php/logs/app.log`
+- **Erro PHP**: Via painel de hospedagem
+- **Console**: F12 no navegador
+
+### **Contatos**
+- **Email**: contato@eliassantos.com
+- **WhatsApp**: +55 11 99999-9999
+
+---
+
+## 📄 Licença
+
+Este projeto é propriedade de Elias Santos. Todos os direitos reservados.
+
+---
+
+**🚴‍♂️ Desenvolvido com paixão por ciclismo e tecnologia!**

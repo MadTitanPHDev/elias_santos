@@ -4,6 +4,7 @@ import { authService } from './auth';
 import { getBackendUrl } from '../config/backend';
 
 const API_BASE_URL = getBackendUrl(); // URL do backend PHP
+console.log('🌐 API BASE URL:', API_BASE_URL);
 
 const api = axios.create({
   baseURL: API_BASE_URL,

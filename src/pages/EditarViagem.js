@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { viagensAPI } from '../services/api';
 import { authService } from '../services/auth';
+import { URLS, getImageUrl } from '../config/urls';
 import './NovaViagem.css'; // Reutilizar os mesmos estilos
 
 const EditarViagem = () => {
@@ -160,7 +161,7 @@ const EditarViagem = () => {
       try {
         console.log('📤 Enviando nova imagem:', imagens[i].name);
         
-        const response = await fetch('http://localhost:5000/api/upload', {
+        const response = await fetch(URLS.upload, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -461,7 +462,7 @@ const EditarViagem = () => {
                 {imagensExistentes.map((imagem, index) => (
                   <div key={imagem.id} className="preview-image-container">
                     <img
-                      src={`http://localhost:5000${imagem.caminho_imagem}`}
+                      src={getImageUrl(imagem.caminho_imagem)}
                       alt={`Imagem ${index + 1}`}
                       className={`preview-image ${index === imagemCapaIndex ? 'capa-selecionada' : ''}`}
                       onClick={() => selecionarImagemCapa(index, true)}

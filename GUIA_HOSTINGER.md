@@ -92,14 +92,25 @@ Senha: [sua_senha]
      ```
      public_html/backend-php/
      ├── api/
+     │   ├── index.php              # API completa
+     │   └── index-simple.php       # API simplificada (para teste)
      ├── config/
+     │   ├── config-simple.php      # Configuração simplificada
+     │   ├── database.php           # Configuração do banco
+     │   ├── cors.php               # Configuração CORS
+     │   └── jwt.php                # Sistema JWT
      ├── middleware/
+     │   └── auth.php               # Middleware de autenticação
      ├── utils/
+     │   └── upload.php             # Sistema de upload
      ├── setup/
-     ├── logs/
-     ├── uploads/
-     ├── .htaccess
-     └── README.md
+     │   └── create-admin.php       # Script para criar admin
+     ├── logs/                      # Pasta para logs
+     ├── uploads/                   # Pasta para uploads
+     ├── .htaccess                  # Configurações Apache
+     ├── test-complete.php          # Teste completo
+     ├── test.php                   # Teste básico
+     └── info.php                   # Teste de PHP
      ```
 
 ### 3.3 Upload do Frontend
@@ -196,32 +207,64 @@ Senha: [sua_senha]
 
 ## 🧪 Passo 6: Testar a Aplicação
 
-### 6.1 Teste do Backend
+### 6.1 Sequência de Testes (Execute nesta ordem)
 
-1. **Health Check:**
-   ```
-   https://seudominio.com/backend-php/api/health
-   ```
-   **Resultado esperado:**
-   ```json
-   {
-     "status": "OK",
-     "message": "API e banco de dados estão funcionando",
-     "timestamp": "2024-01-XX..."
-   }
-   ```
+#### **Teste 1: PHP Funcionando**
+```
+https://khaki-alpaca-178991.hostingersite.com/backend-php/info.php
+```
+**Resultado esperado:** Informações do PHP
 
-2. **Teste de Login:**
-   ```
-   https://seudominio.com/backend-php/api/login
-   ```
-   **Com dados:**
-   ```json
-   {
-     "email": "admin@eliassantos.com",
-     "senha": "admin@eliasSantos"
-   }
-   ```
+#### **Teste 2: Estrutura de Arquivos**
+```
+https://khaki-alpaca-178991.hostingersite.com/backend-php/test-complete.php
+```
+**Resultado esperado:** Todos os arquivos como encontrados
+
+#### **Teste 3: API Simplificada**
+```
+https://khaki-alpaca-178991.hostingersite.com/backend-php/api/index-simple.php
+```
+**Resultado esperado:**
+```json
+{
+  "message": "API de Viagens de Bicicleta - Funcionando!",
+  "version": "1.0.0",
+  "timestamp": "2024-01-XX..."
+}
+```
+
+#### **Teste 4: Health Check**
+```
+https://khaki-alpaca-178991.hostingersite.com/backend-php/api/index-simple.php/health
+```
+**Resultado esperado:**
+```json
+{
+  "status": "OK",
+  "message": "API funcionando perfeitamente!",
+  "timestamp": "2024-01-XX..."
+}
+```
+
+#### **Teste 5: API Completa**
+```
+https://khaki-alpaca-178991.hostingersite.com/backend-php/api/index.php
+```
+**Resultado esperado:** JSON com endpoints da API
+
+### 6.2 Teste de Login (após configurar banco)
+
+```
+https://khaki-alpaca-178991.hostingersite.com/backend-php/api/login
+```
+**Com dados:**
+```json
+{
+  "email": "admin@eliassantos.com",
+  "senha": "admin@eliasSantos"
+}
+```
 
 ### 6.2 Teste do Frontend
 

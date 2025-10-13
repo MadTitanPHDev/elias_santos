@@ -6,6 +6,7 @@ import LazyImage from '../components/LazyImage';
 import Breadcrumbs from '../components/Breadcrumbs';
 import SEO from '../components/SEO';
 import { viagensAPI } from '../services/api';
+import { getImageUrl, getViagemUrl } from '../config/urls';
 import './ViagemDetalhes.css';
 
 const ViagemDetalhes = () => {
@@ -100,12 +101,9 @@ const ViagemDetalhes = () => {
     return capa || viagem.imagens[0];
   };
 
-  // Função para tratar URL da imagem
-  const getImageUrl = (imagePath) => {
-    if (!imagePath) return 'https://images.unsplash.com/photo-1549476464-37392f717541?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80';
-    return imagePath.startsWith('http') 
-      ? imagePath 
-      : `http://localhost:5000${imagePath}`;
+  // Função para tratar URL da imagem (renomeada para evitar conflito)
+  const buildImageUrl = (imagePath) => {
+    return getImageUrl(imagePath);
   };
 
 
@@ -183,7 +181,7 @@ const ViagemDetalhes = () => {
     "@type": "TravelAction",
     "name": viagem.titulo,
     "description": viagem.resumo || viagem.descricao,
-    "url": `https://elias-santos.com/viagem/${viagem.id}`,
+    "url": getViagemUrl(viagem.id),
     "image": imagemCapa ? getImageUrl(imagemCapa.caminho_imagem) : undefined,
     "location": {
       "@type": "Place",
@@ -210,7 +208,7 @@ const ViagemDetalhes = () => {
           title={viagem.titulo}
           description={viagem.resumo || `Descubra todos os detalhes da viagem ${viagem.titulo}. ${viagem.localizacao ? `Localizada em ${viagem.localizacao}.` : ''} ${viagem.distancia_km ? `Distância: ${viagem.distancia_km}km.` : ''} ${viagem.duracao_dias ? `Duração: ${viagem.duracao_dias} dias.` : ''}`}
           keywords={`${viagem.titulo}, cicloviagem, ciclismo, ${viagem.localizacao || ''}, Elias Santos, viagem de bicicleta, rota ciclística, ${viagem.dificuldade || ''}`}
-          image={imagemCapa ? getImageUrl(imagemCapa.caminho_imagem) : undefined}
+          image={imagemCapa ? buildImageUrl(imagemCapa.caminho_imagem) : undefined}
           url={`/viagem/${viagem.id}`}
           type="article"
           structuredData={structuredData}
@@ -292,11 +290,11 @@ const ViagemDetalhes = () => {
 
           <div className="header-image">
             <LazyImage
-              src={imagemCapa ? getImageUrl(imagemCapa.caminho_imagem) : 'https://images.unsplash.com/photo-1549476464-37392f717541?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80'}
+              src={imagemCapa ? buildImageUrl(imagemCapa.caminho_imagem) : getImageUrl(null)}
               alt={`Capa: ${viagem.titulo}`}
               className="capa-imagem"
               onError={(e) => {
-                e.target.src = 'https://images.unsplash.com/photo-1549476464-37392f717541?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80';
+                e.target.src = getImageUrl(null);
               }}
             />
           </div>

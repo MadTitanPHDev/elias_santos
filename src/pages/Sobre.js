@@ -9,7 +9,7 @@ const Sobre = () => {
     "@type": "AboutPage",
     "name": "Sobre o Elias Santos",
     "description": "Conheça a história e missão do Elias Santos, plataforma dedicada a conectar ciclistas e entusiastas de viagens através de rotas incríveis e experiências únicas para pedalar.",
-    "url": "https://elias-santos.com/sobre",
+    "url": "https://khaki-alpaca-178991.hostingersite.com/sobre",
     "mainEntity": {
       "@type": "Person",
       "name": "Elias Santos",

@@ -6,28 +6,74 @@
 
 // Configurações iniciais
 error_reporting(E_ALL);
-ini_set('display_errors', 0); // Desabilitar em produção
+ini_set('display_errors', 0);
 ini_set('log_errors', 1);
-ini_set('error_log', __DIR__ . '/../logs/error.log');
+ini_set('max_execution_time', 30);
+ini_set('memory_limit', '256M');
 
-// Incluir configurações
+// Criar diretório de logs se não existir
+$logDir = __DIR__ . '/../logs/';
+if (!file_exists($logDir)) {
+    mkdir($logDir, 0755, true);
+}
+ini_set('error_log', $logDir . 'error.log');
+
+// Configurar headers primeiro - Anti-cache
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+header('Access-Control-Allow-Credentials: true');
+header('X-Content-Type-Options: nosniff');
+header('X-Frame-Options: DENY');
+header('X-XSS-Protection: 1; mode=block');
+
+// Headers anti-cache para evitar problemas de instabilidade
+header('Cache-Control: no-cache, no-store, must-revalidate');
+header('Pragma: no-cache');
+header('Expires: 0');
+
+// Content-Type será definido dinamicamente baseado no tipo de resposta
+
+// Responder a requisições OPTIONS
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
+// Incluir configurações (usando caminhos absolutos)
 require_once __DIR__ . '/../config/cors.php';
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../config/jwt.php';
 require_once __DIR__ . '/../middleware/auth.php';
 require_once __DIR__ . '/../utils/upload.php';
 
-// Configurar headers
-header('Content-Type: application/json; charset=utf-8');
-header('X-Content-Type-Options: nosniff');
-header('X-Frame-Options: DENY');
-header('X-XSS-Protection: 1; mode=block');
-
 // Função para enviar resposta JSON
 function sendResponse($data, $statusCode = 200) {
-    http_response_code($statusCode);
-    echo json_encode($data, JSON_UNESCAPED_UNICODE);
-    exit();
+    try {
+        // Verificar se headers já foram enviados
+        if (headers_sent()) {
+            error_log('⚠️ Headers já enviados, não é possível definir Content-Type');
+        } else {
+            header('Content-Type: application/json; charset=utf-8');
+        }
+        
+        http_response_code($statusCode);
+        
+        $json = json_encode($data, JSON_UNESCAPED_UNICODE);
+        if ($json === false) {
+            error_log('❌ Erro ao codificar JSON: ' . json_last_error_msg());
+            $json = json_encode(['error' => 'Erro ao processar dados'], JSON_UNESCAPED_UNICODE);
+        }
+        
+        echo $json;
+        exit();
+        
+    } catch (Exception $e) {
+        error_log('❌ Erro na função sendResponse: ' . $e->getMessage());
+        http_response_code(500);
+        echo json_encode(['error' => 'Erro interno do servidor'], JSON_UNESCAPED_UNICODE);
+        exit();
+    }
 }
 
 // Função para enviar erro
@@ -47,7 +93,16 @@ function logRequest($method, $path, $statusCode = null) {
 // Obter método e path da requisição
 $method = $_SERVER['REQUEST_METHOD'];
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$path = str_replace('/api', '', $path); // Remover /api do path
+
+// Remover /backend-php/api do path se estiver presente
+$path = str_replace('/backend-php/api', '', $path);
+// Também remover /api do path
+$path = str_replace('/api', '', $path);
+
+// Se o path estiver vazio, definir como raiz
+if (empty($path) || $path === '/') {
+    $path = '/';
+}
 
 // Log da requisição
 logRequest($method, $path);
@@ -61,6 +116,10 @@ try {
             
         case '/health':
             handleHealth();
+            break;
+            
+        case '/test-uploads':
+            handleTestUploads();
             break;
             
         case '/login':
@@ -135,6 +194,11 @@ try {
     
 } catch (Exception $e) {
     error_log('❌ Erro na API: ' . $e->getMessage());
+    error_log('❌ Stack trace: ' . $e->getTraceAsString());
+    sendError('Erro interno do servidor', 500);
+} catch (Error $e) {
+    error_log('❌ Erro fatal na API: ' . $e->getMessage());
+    error_log('❌ Stack trace: ' . $e->getTraceAsString());
     sendError('Erro interno do servidor', 500);
 }
 
@@ -173,6 +237,30 @@ function handleHealth() {
         ]);
     } catch (Exception $e) {
         sendError('Erro na conexão com o banco de dados', 500);
+    }
+}
+
+function handleTestUploads() {
+    try {
+        $uploadDir = __DIR__ . '/../uploads/';
+        $files = [];
+        
+        if (is_dir($uploadDir)) {
+            $files = scandir($uploadDir);
+            $files = array_filter($files, function($file) {
+                return $file !== '.' && $file !== '..';
+            });
+        }
+        
+        sendResponse([
+            'upload_dir' => $uploadDir,
+            'dir_exists' => is_dir($uploadDir),
+            'dir_writable' => is_writable($uploadDir),
+            'files' => array_values($files),
+            'file_count' => count($files)
+        ]);
+    } catch (Exception $e) {
+        sendError('Erro ao verificar uploads: ' . $e->getMessage(), 500);
     }
 }
 
@@ -255,20 +343,77 @@ function handleVerify() {
  */
 function handleGetViagens() {
     try {
+        error_log('🔄 Iniciando busca de viagens');
+        
+        // Verificar se headers já foram enviados
+        if (headers_sent()) {
+            error_log('⚠️ Headers já enviados, não é possível definir Content-Type');
+        } else {
+            header('Content-Type: application/json; charset=utf-8');
+        }
+        
         $db = Database::getInstance();
+        error_log('✅ Conexão com banco estabelecida');
         
-        $viagens = $db->fetchAll(`
-            SELECT v.*, 
-                   (SELECT caminho_imagem FROM viagem_imagens WHERE viagem_id = v.id AND is_capa = TRUE LIMIT 1) as imagem_capa
-            FROM viagens v
-            ORDER BY v.created_at DESC
-        `);
+        $viagens = $db->fetchAll("SELECT * FROM viagens ORDER BY created_at DESC");
+        error_log('✅ Viagens buscadas: ' . count($viagens));
         
-        sendResponse($viagens);
+        // Se não há viagens, retornar array vazio
+        if (empty($viagens)) {
+            error_log('ℹ️ Nenhuma viagem encontrada, retornando array vazio');
+            http_response_code(200);
+            echo json_encode([], JSON_UNESCAPED_UNICODE);
+            exit();
+        }
+        
+        // Adicionar imagens de capa se existirem
+        foreach ($viagens as &$viagem) {
+            try {
+                $imagemCapa = $db->fetchOne(
+                    'SELECT caminho_imagem FROM viagem_imagens WHERE viagem_id = ? AND is_capa = TRUE LIMIT 1',
+                    [$viagem['id']]
+                );
+                $viagem['imagem_capa'] = $imagemCapa ? $imagemCapa['caminho_imagem'] : null;
+            } catch (Exception $e) {
+                error_log('⚠️ Erro ao buscar imagem de capa para viagem ' . $viagem['id'] . ': ' . $e->getMessage());
+                $viagem['imagem_capa'] = null;
+            }
+        }
+        
+        error_log('✅ Enviando resposta com ' . count($viagens) . ' viagens');
+        
+        // Enviar resposta diretamente
+        http_response_code(200);
+        $json = json_encode($viagens, JSON_UNESCAPED_UNICODE);
+        if ($json === false) {
+            error_log('❌ Erro ao codificar JSON: ' . json_last_error_msg());
+            http_response_code(500);
+            echo json_encode(['error' => 'Erro ao processar dados'], JSON_UNESCAPED_UNICODE);
+        } else {
+            echo $json;
+        }
+        exit();
         
     } catch (Exception $e) {
-        error_log('Erro ao buscar viagens: ' . $e->getMessage());
-        sendError('Erro interno do servidor', 500);
+        error_log('❌ Erro ao buscar viagens: ' . $e->getMessage());
+        error_log('❌ Stack trace: ' . $e->getTraceAsString());
+        
+        if (!headers_sent()) {
+            header('Content-Type: application/json; charset=utf-8');
+        }
+        http_response_code(500);
+        echo json_encode(['error' => 'Erro interno do servidor'], JSON_UNESCAPED_UNICODE);
+        exit();
+    } catch (Error $e) {
+        error_log('❌ Erro fatal ao buscar viagens: ' . $e->getMessage());
+        error_log('❌ Stack trace: ' . $e->getTraceAsString());
+        
+        if (!headers_sent()) {
+            header('Content-Type: application/json; charset=utf-8');
+        }
+        http_response_code(500);
+        echo json_encode(['error' => 'Erro fatal do servidor'], JSON_UNESCAPED_UNICODE);
+        exit();
     }
 }
 
@@ -282,13 +427,13 @@ function handleGetViagensAleatorias() {
         
         $db = Database::getInstance();
         
-        $viagens = $db->fetchAll(`
+        $viagens = $db->fetchAll("
             SELECT v.*, 
                    (SELECT caminho_imagem FROM viagem_imagens WHERE viagem_id = v.id AND is_capa = TRUE LIMIT 1) as imagem_capa
             FROM viagens v
             ORDER BY RAND()
             LIMIT ?
-        `, [$limit]);
+        ", [$limit]);
         
         error_log('✅ Viagens aleatórias encontradas: ' . count($viagens));
         sendResponse($viagens);
@@ -351,10 +496,10 @@ function handleCreateViagem() {
     try {
         $db = Database::getInstance();
         
-        $id = $db->insert(`
+        $id = $db->insert("
             INSERT INTO viagens (titulo, descricao, resumo, distancia_km, duracao_dias, data_viagem, localizacao, dificuldade, valor)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `, [
+        ", [
             $input['titulo'],
             $input['descricao'],
             $input['resumo'] ?? null,
@@ -400,12 +545,12 @@ function handleUpdateViagem($id) {
             sendError('Viagem não encontrada', 404);
         }
         
-        $db->execute(`
+        $db->execute("
             UPDATE viagens 
             SET titulo = ?, descricao = ?, resumo = ?, distancia_km = ?, duracao_dias = ?, 
                 data_viagem = ?, localizacao = ?, dificuldade = ?, valor = ?, updated_at = NOW()
             WHERE id = ?
-        `, [
+        ", [
             $input['titulo'],
             $input['descricao'],
             $input['resumo'] ?? null,

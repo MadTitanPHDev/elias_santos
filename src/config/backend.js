@@ -3,10 +3,12 @@
  * Centralize a URL do backend aqui para facilitar mudanças
  */
 
+import { URLS } from './urls';
+
 // Configurações do backend
 export const backendConfig = {
   // URL base do backend PHP
-  baseURL: process.env.REACT_APP_API_URL || 'https://lightpink-albatross-852396.hostingersite.com/backend-php/api',
+  baseURL: URLS.api.base,
   
   // Timeout para requisições (em milissegundos)
   timeout: 30000,
@@ -38,11 +40,11 @@ export const isDevelopment = () => {
 export const getBackendUrl = () => {
   if (isDevelopment()) {
     // Em desenvolvimento, pode usar localhost ou o servidor de produção
-    return process.env.REACT_APP_API_URL || 'https://lightpink-albatross-852396.hostingersite.com/backend-php/api';
+    return process.env.REACT_APP_API_URL || URLS.api.base;
   }
   
   // Em produção, sempre usar a URL de produção
-  return 'https://lightpink-albatross-852396.hostingersite.com/backend-php/api';
+  return URLS.api.base;
 };
 
 export default backendConfig;

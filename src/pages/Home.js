@@ -20,8 +20,8 @@ const Home = () => {
         const response = await viagensAPI.getAll();
         setViagens(response.data);
       } catch (err) {
+        console.error('Erro ao carregar viagens:', err);
         setError('Erro ao carregar viagens');
-        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -39,10 +39,10 @@ const Home = () => {
     "@type": "WebSite",
     "name": "Elias Santos - Cicloviagens",
     "description": "Descubra as melhores cicloviagens e rotas para pedalar. Aventuras sobre duas rodas, galeria de fotos e dicas para ciclistas.",
-    "url": "https://elias-santos.com",
+    "url": "https://khaki-alpaca-178991.hostingersite.com",
     "potentialAction": {
       "@type": "SearchAction",
-      "target": "https://elias-santos.com/viagem/{search_term_string}",
+      "target": "https://khaki-alpaca-178991.hostingersite.com/viagem/{search_term_string}",
       "query-input": "required name=search_term_string"
     },
     "publisher": {

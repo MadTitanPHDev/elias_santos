@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import LazyImage from './LazyImage';
 import { viagensAPI } from '../services/api';
 import { authService } from '../services/auth';
+import { getImageUrl } from '../config/urls';
 import './ViagemCard.css';
 
 const ViagemCard = ({ viagem, onViagemDeleted }) => {
@@ -11,7 +12,7 @@ const ViagemCard = ({ viagem, onViagemDeleted }) => {
   const [deleting, setDeleting] = useState(false);
   const navigate = useNavigate();
   
-  console.log('ViagemCard - Dados recebidos:', viagem); // DEBUG
+ // DEBUG
   
   const getDificuldadeClass = (dificuldade) => {
     const classes = {
@@ -25,29 +26,23 @@ const ViagemCard = ({ viagem, onViagemDeleted }) => {
 
   // Função para obter a imagem corretamente
   const getImagemUrl = () => {
-    console.log('Tentando obter imagem para viagem:', viagem.id); // DEBUG
-    
     // Verifica todos os possíveis campos onde a imagem pode estar
     if (viagem.imagem_capa) {
-      console.log('Usando imagem_capa:', viagem.imagem_capa);
-      return `http://localhost:5000${viagem.imagem_capa}`;
+      return getImageUrl(viagem.imagem_capa);
     }
     if (viagem.imagemCapa) {
-      console.log('Usando imagemCapa:', viagem.imagemCapa);
-      return `http://localhost:5000${viagem.imagemCapa}`;
+      return getImageUrl(viagem.imagemCapa);
     }
     if (viagem.caminho_imagem) {
-      console.log('Usando caminho_imagem:', viagem.caminho_imagem);
-      return `http://localhost:5000${viagem.caminho_imagem}`;
+      return getImageUrl(viagem.caminho_imagem);
     }
     
-    console.log('Nenhuma imagem encontrada, usando fallback');
-    return 'https://images.unsplash.com/photo-1549476464-37392f717541?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80';
+    return getImageUrl(null); // Retorna imagem padrão
   };
 
   const handleImageError = (e) => {
     console.error('Erro ao carregar imagem:', e.target.src);
-    e.target.src = 'https://images.unsplash.com/photo-1549476464-37392f717541?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80';
+    e.target.src = getImageUrl(null); // Usar função centralizada
   };
 
   const handleEdit = () => {

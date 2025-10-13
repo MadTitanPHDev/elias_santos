@@ -28,8 +28,8 @@ define('UPLOAD_DIR', 'uploads/');
 define('CORS_ALLOWED_ORIGINS', [
     'http://localhost:3000',
     'http://localhost:3001',
-    'https://seudominio.com',
-    'https://www.seudominio.com'
+    'https://khaki-alpaca-178991.hostingersite.com',
+    'https://www.khaki-alpaca-178991.hostingersite.com'
 ]);
 
 // Configurações de log

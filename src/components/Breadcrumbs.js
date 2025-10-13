@@ -11,7 +11,7 @@ const Breadcrumbs = ({ items }) => {
       "@type": "ListItem",
       "position": index + 1,
       "name": item.name,
-      "item": item.url ? `https://elias-santos.com${item.url}` : undefined
+      "item": item.url ? `https://khaki-alpaca-178991.hostingersite.com${item.url}` : undefined
     }))
   };
 

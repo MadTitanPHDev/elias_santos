@@ -1,6 +1,6 @@
 // Utilitário para gerar sitemap dinâmico
 export const generateSitemap = (viagens = []) => {
-  const baseUrl = 'https://elias-santos.com';
+  const baseUrl = 'https://khaki-alpaca-178991.hostingersite.com';
   const currentDate = new Date().toISOString().split('T')[0];
   
   const staticPages = [

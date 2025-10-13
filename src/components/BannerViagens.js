@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { viagensAPI } from '../services/api';
+import { getImageUrl } from '../config/urls';
 import './BannerViagens.css';
 
 const BannerViagens = () => {
@@ -16,14 +17,13 @@ const BannerViagens = () => {
   const carregarViagemAleatoria = async () => {
     try {
       setLoading(true);
-      setError(null); // Limpar erro anterior
-      const response = await viagensAPI.getAleatorias(1); // Busca apenas 1 viagem aleatória
-      console.log('📋 Viagem aleatória recebida:', response.data);
+      setError(null);
+      const response = await viagensAPI.getAleatorias(1);
       setViagens(response.data || []);
     } catch (err) {
       console.error('Erro no banner:', err);
       setError('Erro ao carregar viagem');
-      setViagens([]); // Garantir que o array está vazio em caso de erro
+      setViagens([]);
     } finally {
       setLoading(false);
     }
@@ -106,7 +106,7 @@ const BannerViagens = () => {
       console.log('🖼️ Banner - URL já completa:', imagePath);
       return imagePath;
     }
-    const fullUrl = `http://localhost:5000${imagePath}`;
+    const fullUrl = getImageUrl(imagePath);
     console.log('🖼️ Banner - URL construída:', fullUrl);
     return fullUrl;
   };

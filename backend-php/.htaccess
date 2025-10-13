@@ -4,7 +4,7 @@
 # Habilitar mod_rewrite
 RewriteEngine On
 
-# Redirecionar todas as requisições para index.php
+# Redirecionar requisições da API para index.php
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^api/(.*)$ api/index.php [QSA,L]
@@ -48,6 +48,13 @@ php_value session.use_strict_mode 1
     Header always set X-XSS-Protection "1; mode=block"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    
+    # Headers anti-cache para API
+    <FilesMatch "api/.*\.php$">
+        Header always set Cache-Control "no-cache, no-store, must-revalidate"
+        Header always set Pragma "no-cache"
+        Header always set Expires "0"
+    </FilesMatch>
 </IfModule>
 
 # Compressão GZIP
@@ -64,7 +71,7 @@ php_value session.use_strict_mode 1
     AddOutputFilterByType DEFLATE application/json
 </IfModule>
 
-# Cache para arquivos estáticos
+# Cache para arquivos estáticos - Desabilitado para API
 <IfModule mod_expires.c>
     ExpiresActive On
     ExpiresByType image/jpg "access plus 1 month"
@@ -79,9 +86,11 @@ php_value session.use_strict_mode 1
     ExpiresByType application/x-javascript "access plus 1 month"
     ExpiresByType application/x-shockwave-flash "access plus 1 month"
     ExpiresByType image/x-icon "access plus 1 year"
+    # Não cachear arquivos PHP da API
+    <FilesMatch "api/.*\.php$">
+        ExpiresActive Off
+    </FilesMatch>
     ExpiresDefault "access plus 2 days"
 </IfModule>
 
-# Configurações de erro
-ErrorDocument 404 /api/index.php
-ErrorDocument 500 /api/index.php
+# Configurações de erro removidas para evitar loops

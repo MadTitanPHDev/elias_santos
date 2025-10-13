@@ -54,6 +54,14 @@ class Database {
     
     private function createTables() {
         try {
+            // Verificar se as tabelas já existem para evitar recriação desnecessária
+            $tablesExist = $this->checkTablesExist();
+            
+            if ($tablesExist) {
+                error_log("✅ Tabelas já existem, pulando criação");
+                return;
+            }
+            
             // Tabela de usuários
             $this->connection->exec("
                 CREATE TABLE IF NOT EXISTS usuarios (
@@ -104,6 +112,25 @@ class Database {
             
         } catch (PDOException $e) {
             error_log("❌ Erro ao criar tabelas: " . $e->getMessage());
+            // Não relançar a exceção para evitar quebrar a conexão
+        }
+    }
+    
+    private function checkTablesExist() {
+        try {
+            $stmt = $this->connection->query("SHOW TABLES LIKE 'usuarios'");
+            $usuariosExists = $stmt->rowCount() > 0;
+            
+            $stmt = $this->connection->query("SHOW TABLES LIKE 'viagens'");
+            $viagensExists = $stmt->rowCount() > 0;
+            
+            $stmt = $this->connection->query("SHOW TABLES LIKE 'viagem_imagens'");
+            $imagensExists = $stmt->rowCount() > 0;
+            
+            return $usuariosExists && $viagensExists && $imagensExists;
+        } catch (Exception $e) {
+            error_log("Erro ao verificar tabelas: " . $e->getMessage());
+            return false;
         }
     }
     
