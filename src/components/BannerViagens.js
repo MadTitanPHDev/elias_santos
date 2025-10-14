@@ -96,7 +96,7 @@ const BannerViagens = () => {
   console.log('🎯 Banner - viagem atual:', viagemAtual);
 
   // Construir URL completa da imagem de capa
-  const getImageUrl = (imagePath) => {
+  const buildImageUrl = (imagePath) => {
     console.log('🖼️ Banner - imagem_capa recebida:', imagePath);
     if (!imagePath) {
       console.log('🖼️ Banner - usando imagem padrão');
@@ -117,7 +117,7 @@ const BannerViagens = () => {
         className="banner-item"
         onClick={() => handleViagemClick(viagemAtual.id)}
         style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${getImageUrl(viagemAtual.imagem_capa)})`
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${buildImageUrl(viagemAtual.imagem_capa)})`
         }}
       >
         <div className="banner-content">
