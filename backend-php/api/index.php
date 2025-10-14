@@ -242,7 +242,7 @@ function handleHealth() {
 
 function handleTestUploads() {
     try {
-        $uploadDir = __DIR__ . '/../public/uploads/';
+        $uploadDir = __DIR__ . '/../uploads/';
         $files = [];
         
         if (is_dir($uploadDir)) {

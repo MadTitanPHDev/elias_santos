@@ -39,14 +39,14 @@ class ImageUpload {
             $imageId = self::saveToDatabase($viagemId, $filepath, $descricao, $isCapa);
             
             // Calcular caminho relativo para retorno
-            $relativePath = str_replace(__DIR__ . '/../public/', '', $filepath);
+            $relativePath = str_replace(__DIR__ . '/../uploads/', '', $filepath);
             
             return [
                 'success' => true,
                 'message' => 'Imagem enviada com sucesso',
                 'image' => [
                     'id' => $imageId,
-                    'caminho_imagem' => '/' . $relativePath,
+                    'caminho_imagem' => '/' . $filepath,
                     'descricao_imagem' => $descricao ?: 'Imagem da viagem',
                     'is_capa' => $isCapa
                 ]

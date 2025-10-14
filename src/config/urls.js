@@ -30,7 +30,7 @@ export const URLS = {
   // Imagens
   images: {
     base: SITE_URL,
-    uploads: `${SITE_URL}/backend-php/public/uploads`
+    uploads: `${SITE_URL}/backend-php/uploads`
   },
   
   // Social
