@@ -50,12 +50,22 @@ export const getImageUrl = (imagePath) => {
     return 'https://images.unsplash.com/photo-1549476464-37392f717541?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80';
   }
   
-  if (imagePath.startsWith('http')) {
-    return imagePath;
+  // Evita duplicidade do prefixo
+  if (imagePath.startsWith('/uploads')) {
+    return `${SITE_URL}/backend-php/public${imagePath}`;
   }
+  // Se for apenas o nome do arquivo
+  return `${URLS.images.uploads}/${imagePath.replace(/^\//, '')}`;
+
+
+
+  // if (imagePath.startsWith('http')) {
+  //   return imagePath;
+  // }
   
-  // Se é um caminho relativo, construir URL completa
-  return `${URLS.images.base}${imagePath}`;
+  // // Se é um caminho relativo, construir URL completa
+  // return `${URLS.images.base}${imagePath}`;
+
 };
 
 // Função para construir URL de página
