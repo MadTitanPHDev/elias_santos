@@ -140,7 +140,7 @@ const Footer = () => {
                 📘
               </a>
               <a 
-                href="https://instagram.com/eliassantoscicloviagens" 
+                href="https://www.instagram.com/elias.viagensecicloturismo/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="social-link instagram"

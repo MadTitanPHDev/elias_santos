@@ -37,7 +37,7 @@ export const URLS = {
   social: {
     whatsapp: 'https://wa.me/5511999999999',
     email: 'mailto:contato@eliassantos.com',
-    instagram: 'https://instagram.com/eliassantoscicloviagens',
+    instagram: 'https://www.instagram.com/elias.viagensecicloturismo/',
     facebook: 'https://facebook.com/eliassantoscicloviagens',
     twitter: 'https://twitter.com/eliassantosbike',
     youtube: 'https://youtube.com/@eliassantoscicloviagens'
